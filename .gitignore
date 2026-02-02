@@ -168,7 +168,7 @@ tags
 # ruff
 .ruff_cache
 
-# our proj
+# Project-specific
 /output/
 /outputs/
 /checkpoint/
@@ -176,3 +176,76 @@ tags
 exp
 .gradio/
 experimental_voices
+
+# Model artifacts
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+model_checkpoint*
+best_model
+last_model
+
+# Audio files (keep demo samples only)
+*.wav
+*.mp3
+*.flac
+*.m4a
+*.ogg
+!demo/text_examples/
+!demo/voices/
+
+# Cached model downloads
+huggingface_cache/
+.cache/
+*.bin
+
+# Development and local settings
+.env.local
+.env.*.local
+local_config.yaml
+
+# Python environment (uv/venv)
+uv.lock
+venv/
+.venv/
+
+# Build and distribution files
+build/
+dist/
+*.egg-info/
+*.egg
+
+# OS specific
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.AppleDouble/
+.LSOverride/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.vim/
+
+# Gradio temporary files
+*.sqlite
+gradio_cached_examples/
+
+# vLLM
+*.quant
+
+# Documentation build
+site/
+docs/_build/
+.doctrees/
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+.temp/

@@ -180,6 +180,140 @@ https://github.com/user-attachments/assets/0901d274-f6ae-46ef-a0fd-3c4fba4f76dc
 
 <br>
 
+## Quick Start
+
+### Installation
+
+#### Prerequisites
+- Python >= 3.9
+- For macOS: Install [uv](https://docs.astral.sh/uv/getting-started/) for fast package management
+
+#### Setup (macOS)
+```bash
+# Clone the repository
+git clone https://github.com/microsoft/VibeVoice.git
+cd VibeVoice
+
+# For macOS (M1/M2/M4 or Intel), run the automated deployment script
+bash deploy_macos.sh
+
+# Or manual setup with uv
+uv venv venv
+source venv/bin/activate
+uv pip install -e .
+```
+
+#### Setup (Linux/Windows)
+```bash
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install the package
+pip install -e .
+```
+
+### Quick Examples
+
+#### ASR (Speech-to-Text)
+```python
+from vibevoice.modular.modeling_vibevoice_asr import VibeVoiceASR
+from vibevoice.processor.vibevoice_asr_processor import VibeVoiceASRProcessor
+
+model_id = "microsoft/VibeVoice-ASR"
+model = VibeVoiceASR.from_pretrained(model_id)
+processor = VibeVoiceASRProcessor.from_pretrained(model_id)
+
+# Process audio file
+audio_path = "path/to/audio.wav"
+inputs = processor(audio_path, return_tensors="pt")
+outputs = model(**inputs)
+result = processor.decode(outputs.sequences[0])
+print(result)
+```
+
+#### Streaming TTS (Text-to-Speech)
+```python
+from vibevoice.modular.modeling_vibevoice_streaming import VibeVoiceStreaming
+
+model_id = "microsoft/VibeVoice-Realtime-0.5B"
+model = VibeVoiceStreaming.from_pretrained(model_id)
+
+text = "Hello, this is a test."
+audio = model.generate(text)
+# Audio will be saved or returned based on model configuration
+```
+
+### Web Demo
+
+Run the interactive Gradio web interface:
+```bash
+cd demo/web
+python app.py
+# Open http://localhost:7860 in your browser
+```
+
+### Model Weights
+
+VibeVoice requires pretrained model weights from HuggingFace. You have multiple options to download them:
+
+#### Automatic Download Script (Recommended)
+```bash
+# Interactive menu to select models
+bash download_models.sh
+```
+
+#### Manual Download with Python
+```bash
+source venv/bin/activate
+
+# Download VibeVoice-ASR (required for speech recognition)
+python -c "from huggingface_hub import snapshot_download; snapshot_download('microsoft/VibeVoice-ASR')"
+
+# Download VibeVoice-Realtime-0.5B (required for real-time TTS)
+python -c "from huggingface_hub import snapshot_download; snapshot_download('microsoft/VibeVoice-Realtime-0.5B')"
+
+# Download Qwen2.5-7B (dependency for ASR)
+python -c "from huggingface_hub import snapshot_download; snapshot_download('Qwen/Qwen2.5-7B')"
+
+# Optional: Download VibeVoice-1.5B (for long-form TTS)
+python -c "from huggingface_hub import snapshot_download; snapshot_download('microsoft/VibeVoice-1.5B')"
+```
+
+#### Model Overview
+
+| Model | Size | Purpose | Storage | Link |
+|-------|------|---------|---------|------|
+| **VibeVoice-ASR** | 7B | Speech-to-text with speaker diarization | 20GB | [HF](https://huggingface.co/microsoft/VibeVoice-ASR) |
+| **VibeVoice-Realtime-0.5B** | 0.5B | Real-time text-to-speech | 3GB | [HF](https://huggingface.co/microsoft/VibeVoice-Realtime-0.5B) |
+| **Qwen2.5-7B** | 7B | LLM backbone for ASR | 20GB | [HF](https://huggingface.co/Qwen/Qwen2.5-7B) |
+| **VibeVoice-1.5B** | 1.5B | Long-form multi-speaker TTS (optional) | 8GB | [HF](https://huggingface.co/microsoft/VibeVoice-1.5B) |
+
+**Minimum Storage**: 35GB (ASR + Realtime TTS + Qwen2.5-7B)  
+**Full Setup**: 60GB+ (all models included)
+
+For detailed model information and download instructions, see [MODEL_WEIGHTS.md](MODEL_WEIGHTS.md).
+
+### Full Documentation
+
+- [VibeVoice-ASR Documentation](docs/vibevoice-asr.md) - Speech-to-text with speaker diarization
+- [VibeVoice-TTS Documentation](docs/vibevoice-tts.md) - Long-form multi-speaker synthesis
+- [VibeVoice-Realtime Documentation](docs/vibevoice-realtime-0.5b.md) - Real-time streaming TTS
+- [vLLM Integration](docs/vibevoice-vllm-asr.md) - Optimized inference for ASR
+- [Finetuning Guide](finetuning-asr/README.md) - Custom ASR model training
+
+## System Requirements
+
+### Recommended Specs
+- **GPU Memory**: 8GB+ (for model inference)
+- **RAM**: 16GB+ recommended
+- **Storage**: 50GB+ (for model weights and data)
+
+### Hardware Compatibility
+- **NVIDIA GPUs**: CUDA 11.8+ with cuDNN
+- **Apple Silicon**: M1/M2/M3/M4 Macs with Metal Performance Shaders (MPS)
+- **AMD/Intel**: CPU inference supported (slower)
+
 ## Contributing
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution guidelines.
@@ -198,3 +332,42 @@ We do not recommend using VibeVoice in commercial or real-world applications wit
 ## Star History
 
 ![Star History Chart](https://api.star-history.com/svg?repos=Microsoft/vibevoice&type=date&legend=top-left)
+
+## Citation
+
+If you find VibeVoice useful in your research, please cite our papers:
+
+```bibtex
+@article{vibevoice-asr,
+  title={VibeVoice-ASR: A Long-context Speech Recognition Model with Structured Transcription},
+  author={VibeVoice Team},
+  journal={arXiv},
+  year={2026}
+}
+
+@article{vibevoice-tts,
+  title={VibeVoice-TTS: Long-form Multi-speaker Text-to-Speech Synthesis},
+  author={VibeVoice Team},
+  journal={arXiv},
+  year={2025}
+}
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+VibeVoice builds upon the excellent work of the following projects:
+- [Hugging Face Transformers](https://github.com/huggingface/transformers)
+- [Diffusers](https://github.com/huggingface/diffusers)
+- [Qwen LLM](https://github.com/QwenLM/Qwen)
+
+## Contact
+
+For questions, issues, or contributions, please visit our [GitHub Issues](https://github.com/microsoft/VibeVoice/issues) page or reach out to the team at VibeVoice@microsoft.com.
+
+## Disclaimer
+
+VibeVoice is an open-source research framework. Users are responsible for ensuring their use complies with all applicable laws and regulations. The generated synthetic speech should not be used for impersonation, fraud, or spreading disinformation.
