@@ -182,6 +182,10 @@ https://github.com/user-attachments/assets/0901d274-f6ae-46ef-a0fd-3c4fba4f76dc
 
 ## Quick Start
 
+> **⚡ 最快启动**: 仅需 3 步，5 分钟内启动完整的 VibeVoice 工程！
+> 
+> 详见 [QUICKSTART.md](QUICKSTART.md) 快速启动指南。
+
 ### Installation
 
 #### Prerequisites
@@ -302,17 +306,42 @@ For detailed model information and download instructions, see [MODEL_WEIGHTS.md]
 - [vLLM Integration](docs/vibevoice-vllm-asr.md) - Optimized inference for ASR
 - [Finetuning Guide](finetuning-asr/README.md) - Custom ASR model training
 
+### Platform-Specific Guides
+
+- [macOS Deployment Guide](DEPLOY_MACOS.md) - Step-by-step setup for macOS
+- [Mac mini M4 Pro Optimization](M4_PRO_OPTIMIZATION.md) - Detailed optimization for Apple Silicon
+- [Model Weights Guide](MODEL_WEIGHTS.md) - Download and storage information
+
 ## System Requirements
 
 ### Recommended Specs
-- **GPU Memory**: 8GB+ (for model inference)
-- **RAM**: 16GB+ recommended
-- **Storage**: 50GB+ (for model weights and data)
+- **GPU Memory**: 8GB+ for inference (M4 Pro: integrated with unified memory)
+- **RAM**: 16GB+ recommended (M4 Pro 16GB base edition supported)
+- **Storage**: Depends on deployment strategy:
+  - Minimal (Realtime TTS only): 5GB
+  - Standard (ASR + Realtime): 35GB
+  - Complete (all models): 60GB+
 
 ### Hardware Compatibility
 - **NVIDIA GPUs**: CUDA 11.8+ with cuDNN
 - **Apple Silicon**: M1/M2/M3/M4 Macs with Metal Performance Shaders (MPS)
+  - M4 Pro optimized: Utilizes unified memory architecture for efficient inference
+  - Supports both fp32, fp16, and bfloat16 precision
 - **AMD/Intel**: CPU inference supported (slower)
+
+### Mac mini M4 Pro Specific Notes
+- **Base Configuration**: 10-core CPU (8P+2E), 10-core GPU, 16GB unified memory
+- **Recommended Deployment**:
+  - Plan A: Realtime-0.5B only (5GB) - optimal for minimal storage
+  - Plan B: ASR + Realtime (35GB) - suitable for 512GB SSD
+  - Plan C: Full setup - recommend external Thunderbolt SSD
+- **Storage Considerations**: 
+  - If SSD space < 100GB available, use external storage or quantized models
+  - See [DEPLOY_MACOS.md](DEPLOY_MACOS.md) for detailed optimization strategies
+- **Memory Management**:
+  - 16GB unified memory sufficient for single model inference
+  - For multi-model concurrent execution, use sequential loading
+  - Enable quantization (INT8) to reduce memory footprint by 50%
 
 ## Contributing
 

@@ -78,12 +78,7 @@ docs/_build/
 # PyBuilder
 target/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
+# Jupyter Notebook & IPython
 
 # pyenv
 .python-version
@@ -96,12 +91,8 @@ celerybeat-schedule
 
 # Environments
 .env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+.env.local
+.env.*.local
 
 # Spyder project settings
 .spyderproject
@@ -198,23 +189,36 @@ last_model
 # Cached model downloads
 huggingface_cache/
 .cache/
+.models/
+models/
 *.bin
 
 # Development and local settings
 .env.local
 .env.*.local
 local_config.yaml
+debug.env
 
 # Python environment (uv/venv)
 uv.lock
 venv/
 .venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+*.venv
 
 # Build and distribution files
 build/
 dist/
 *.egg-info/
 *.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints
+*.ipynb_checkpoints
 
 # OS specific
 .DS_Store
